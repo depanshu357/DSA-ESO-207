@@ -12,8 +12,8 @@ int main()
     // Matrix Formation
     int n,flag=0;
     scanf("%d", &n);
-    node *row1[n + 1], *column1[n + 1], *p1[n + 1], *q1[n + 1];
-    node *row2[n + 1], *column2[n + 1], *p2[n + 1], *q2[n + 1];
+    node *row1[n + 1],  *p1[n + 1];
+    node *column2[n + 1], *q2[n + 1];
     for (int i = 0; i <= n; i++)
     {
         row1[i] = (node *)malloc(sizeof(node));
