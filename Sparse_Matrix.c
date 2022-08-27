@@ -1,116 +1,155 @@
 #include <stdio.h>
 #include <stdlib.h>
-struct stud
+struct LinkedList
 {
-    int x, y, value;
-    struct stud *right;
-    struct stud *bottom;
+    int index_x, index_y, value;
+    struct LinkedList *right;
+    struct LinkedList *bottom;
 };
-typedef struct stud node;
+typedef struct LinkedList *node;
+
+node CreateNode(node row_pointer[], node col_pointer[], int index_x, int index_y, int value, node prev_node_x, node prev_node_y)
+{
+
+    node temp = (node)malloc(sizeof(struct LinkedList));
+    temp->value = value;
+    temp->index_x = index_x;
+    temp->index_y = index_y;
+    temp->right = NULL;
+    temp->bottom = NULL;
+
+    if (col_pointer[index_y] != NULL)
+    {
+        prev_node_y->bottom = temp;
+    }
+
+    if (row_pointer[index_x] != NULL)
+    {
+        prev_node_x->right = temp;
+    }
+
+    if (col_pointer[index_y] == NULL)
+    {
+        col_pointer[index_y] = temp;
+    }
+
+    if (row_pointer[index_x] == NULL)
+    {
+        row_pointer[index_x] = temp;
+    }
+    return temp;
+}
+
 int main()
-{   
+{
     // Matrix Formation
-    int n,flag=0;
+    int n, matrix_no, row, col, k, value, flag = 0, check = 1;
     scanf("%d", &n);
-    node *row1[n + 1],  *p1[n + 1];
-    node *column2[n + 1], *q2[n + 1];
-    for (int i = 0; i <= n; i++)
+    node m1_row_pointer[n + 1], m1_col_pointer[n + 1];
+    node m2_row_pointer[n + 1], m2_col_pointer[n + 1];
+    node m1_prev_node_x[n + 1], m1_prev_node_y[n + 1];
+    node m2_prev_node_x[n + 1], m2_prev_node_y[n + 1];
+    for (int i = 0; i < n + 1; i++)
     {
-        row1[i] = (node *)malloc(sizeof(node));
-        // row2[i] = (node *)malloc(sizeof(node));
-        // column1[i] = (node *)malloc(sizeof(node));
-        column2[i] = (node *)malloc(sizeof(node));
-        p1[i] = row1[i];
-        // q1[i] = column1[i];
-        // p2[i] = row2[i];
-        q2[i] = column2[i];
-        row1[i]->x = i;
-        row1[i]->y = 0;
-        row1[i]->value = 0;
-        // column1[i]->x = 0;
-        // column1[i]->y = i;
-        // column1[i]->value = 0;
-        // row2[i]->x = i;
-        // row2[i]->y = 0;
-        // row2[i]->value = 0;
-        column2[i]->x = 0;
-        column2[i]->y = i;
-        column2[i]->value = 0;
+        m1_row_pointer[i] = NULL;
+        m1_col_pointer[i] = NULL;
+
+        m1_prev_node_x[i] = NULL;
+        m1_prev_node_y[i] = NULL;
+
+        m2_row_pointer[i] = NULL;
+        m2_col_pointer[i] = NULL;
+
+        m2_prev_node_x[i] = NULL;
+        m2_prev_node_y[i] = NULL;
     }
-    while (1)
+
+    while (check)
     {
-    int mnum, x, y, value;
-        scanf("%d", &mnum);
-        if (mnum == 0)
-            break;
-        scanf("%d %d %d", &x, &y, &value);
-        if (mnum == 1)
+        for (int i = 0; i < 4; i++)
         {
-            node *help = (node *)malloc(sizeof(node));
-            help->x = x;
-            help->y = y;
-            help->value = value;
-            p1[x]->right = help;
-            // q1[y]->bottom = help;
-            p1[x] = p1[x]->right;
-            // q1[y] = q1[y]->bottom;
+            scanf("%d", &k);
+            if (k == 0)
+            {
+                check = 0;
+                break;
+            }
+            if (i == 0)
+            {
+                matrix_no = k;
+            }
+            else if (i == 1)
+            {
+                row = k;
+            }
+            else if (i == 2)
+            {
+                col = k;
+            }
+            else
+            {
+                value = k;
+            }
         }
-        else
+
+        if (check)
         {
-            node *help = (node *)malloc(sizeof(node));
-            help->x = x;
-            help->y = y;
-            help->value = value;
-            // p2[x]->right = help;
-            q2[y]->bottom = help;
-            // p2[x] = p2[x]->right;
-            q2[y] = q2[y]->bottom;
+            if (matrix_no == 1)
+            {
+                node temp = CreateNode(m1_row_pointer, m1_col_pointer, row, col, value, m1_prev_node_x[row], m1_prev_node_y[col]);
+                m1_prev_node_x[row] = temp;
+                m1_prev_node_y[col] = temp;
+            }
+            else if (matrix_no == 2)
+            {
+                node temp = CreateNode(m2_row_pointer, m2_col_pointer, row, col, value, m2_prev_node_x[row], m2_prev_node_y[col]);
+                m2_prev_node_x[row] = temp;
+                m2_prev_node_y[col] = temp;
+            }
         }
     }
-    for (int i = 1; i <= n; i++)
-    {
-        p1[i]->right = NULL;
-        // q1[i]->bottom = NULL;
-        // p2[i]->right = NULL;
-        q2[i]->bottom = NULL;
-    }
-    // node *test = column1[1];
-    // while (test != NULL)
-    // {
-    //     printf("%d ", test->value);
-    //     test = test->bottom;
-    // }
 
     // Matrix Multiplication
-    for(int i=1;i<=n;i++){
-            if(row1[i]->right==NULL)continue;
-        for(int j=1;j<=n;j++){
-            if(column2[j]->bottom==NULL)continue;
-            node *temprow=row1[i],*tempcolumn=column2[j];
-            int sum=0;
-            while(temprow!=NULL && tempcolumn!=NULL){
-                if((temprow->y)==(tempcolumn->x)){
-                    sum+=((temprow->value)*(tempcolumn->value));
-                    // printf("%d ",(temprow->value)*(tempcolumn->value));
-                    temprow=temprow->right;
-                    tempcolumn=tempcolumn->bottom;
-                }else{
-                    if((temprow->y)>(tempcolumn->x)){
-                        tempcolumn=tempcolumn->bottom;
-                    }else{
-                        temprow=temprow->right;
+    for (int i = 1; i <= n; i++)
+    {
+        if (m1_row_pointer[i] == NULL)
+            continue;
+        for (int j = 1; j <= n; j++)
+        {
+            if (m2_col_pointer[j] == NULL)
+                continue;
+            node temp_row_pointer = m1_row_pointer[i], temp_col_pointer = m2_col_pointer[j];
+            int sum = 0;
+            while (temp_row_pointer != NULL && temp_col_pointer != NULL)
+            {
+                if ((temp_row_pointer->index_y) == (temp_col_pointer->index_x))
+                {
+                    sum += ((temp_row_pointer->value) * (temp_col_pointer->value));
+
+                    temp_row_pointer = temp_row_pointer->right;
+                    temp_col_pointer = temp_col_pointer->bottom;
+                }
+                else
+                {
+                    if ((temp_row_pointer->index_y) > (temp_col_pointer->index_x))
+                    {
+                        temp_col_pointer = temp_col_pointer->bottom;
+                    }
+                    else
+                    {
+                        temp_row_pointer = temp_row_pointer->right;
                     }
                 }
             }
-            if(sum!=0){
-            printf("%d %d %d\n",i,j,sum);
-            flag=1;
+            if (sum != 0)
+            {
+                printf("%d %d %d\n", i, j, sum);
+                flag = 1;
             }
-            
         }
     }
-    if(flag==0){
+    if (flag == 0)
+    {
         printf("NULL MATRIX!");
     }
-
 }
