@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+
 struct LinkedList
 {
     int index_x, index_y, value;
@@ -8,6 +9,7 @@ struct LinkedList
 };
 typedef struct LinkedList *node;
 
+//Making pointers to linked list and making connections in right and bottom direction
 node CreateNode(node row_pointer[], node col_pointer[], int index_x, int index_y, int value, node prev_node_x, node prev_node_y)
 {
 
@@ -68,6 +70,7 @@ int main()
     {
         for (int i = 0; i < 4; i++)
         {
+            //scanning all the 4 datas in a given line
             scanf("%d", &k);
             if (k == 0)
             {
@@ -113,17 +116,18 @@ int main()
     for (int i = 1; i <= n; i++)
     {
         if (m1_row_pointer[i] == NULL)
-            continue;
+            continue;// To skip null rows
         for (int j = 1; j <= n; j++)
         {
             if (m2_col_pointer[j] == NULL)
-                continue;
+                continue;//To skip null columns
             node temp_row_pointer = m1_row_pointer[i], temp_col_pointer = m2_col_pointer[j];
             int sum = 0;
             while (temp_row_pointer != NULL && temp_col_pointer != NULL)
             {
                 if ((temp_row_pointer->index_y) == (temp_col_pointer->index_x))
                 {
+                //Matching the condition when there are non-zero elements in positions which can be multiplied
                     sum += ((temp_row_pointer->value) * (temp_col_pointer->value));
 
                     temp_row_pointer = temp_row_pointer->right;
@@ -131,6 +135,7 @@ int main()
                 }
                 else
                 {
+                    //else moving to next positions in x and/or y directions
                     if ((temp_row_pointer->index_y) > (temp_col_pointer->index_x))
                     {
                         temp_col_pointer = temp_col_pointer->bottom;
@@ -152,4 +157,7 @@ int main()
     {
         printf("NULL MATRIX!");
     }
+    // m nodes are created which is equal to the number of total non-zero enteries in matrix 1 and 2;
+    // hence space complexity is O(m)
+    return 0;
 }
