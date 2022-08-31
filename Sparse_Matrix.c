@@ -9,7 +9,7 @@ struct LinkedList
 };
 typedef struct LinkedList *node;
 
-// Making pointers to linked list and making connections in right and bottom direction
+//  making connections in right and bottom direction
 node CreateNode(node row_pointer[], node col_pointer[], long long int index_x, long long int index_y, long long int value, node prev_node_x, node prev_node_y)
 {
 
