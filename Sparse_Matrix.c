@@ -3,14 +3,14 @@
 
 struct LinkedList
 {
-    int index_x, index_y, value;
+    long long int index_x, index_y, value;
     struct LinkedList *right;
     struct LinkedList *bottom;
 };
 typedef struct LinkedList *node;
 
-//Making pointers to linked list and making connections in right and bottom direction
-node CreateNode(node row_pointer[], node col_pointer[], int index_x, int index_y, int value, node prev_node_x, node prev_node_y)
+// Making pointers to linked list and making connections in right and bottom direction
+node CreateNode(node row_pointer[], node col_pointer[], long long int index_x, long long int index_y, long long int value, node prev_node_x, node prev_node_y)
 {
 
     node temp = (node)malloc(sizeof(struct LinkedList));
@@ -19,6 +19,7 @@ node CreateNode(node row_pointer[], node col_pointer[], int index_x, int index_y
     temp->index_y = index_y;
     temp->right = NULL;
     temp->bottom = NULL;
+    //creating linked list based matrix 
 
     if (col_pointer[index_y] != NULL)
     {
@@ -45,14 +46,18 @@ node CreateNode(node row_pointer[], node col_pointer[], int index_x, int index_y
 int main()
 {
     // Matrix Formation
-    int n, matrix_no, row, col, k, value, flag = 0, check = 1;
-    scanf("%d", &n);
+    long long int n, matrix_no, row, col, k, value, flag = 0, check = 1;
+    // flag is there to check if the matrix formed is NULL Matrix or not
+    scanf("%lld", &n);
     node m1_row_pointer[n + 1], m1_col_pointer[n + 1];
     node m2_row_pointer[n + 1], m2_col_pointer[n + 1];
+    // row_pointer and col_pointer are pointing at the row and column starting of the linked list
     node m1_prev_node_x[n + 1], m1_prev_node_y[n + 1];
     node m2_prev_node_x[n + 1], m2_prev_node_y[n + 1];
-    for (int i = 0; i < n + 1; i++)
-    {
+    // pre node pointers are used to create linked list based data structure pointing in bottom and right direction
+    for (long long int i = 0; i < n + 1; i++)
+    {  
+        //initializing all pointers as NULL
         m1_row_pointer[i] = NULL;
         m1_col_pointer[i] = NULL;
 
@@ -68,10 +73,10 @@ int main()
 
     while (check)
     {
-        for (int i = 0; i < 4; i++)
+        for (long long int i = 0; i < 4; i++)
         {
-            //scanning all the 4 datas in a given line
-            scanf("%d", &k);
+            // scanning all the 4 datas in a given line
+            scanf("%lld", &k);
             if (k == 0)
             {
                 check = 0;
@@ -113,21 +118,21 @@ int main()
     }
 
     // Matrix Multiplication
-    for (int i = 1; i <= n; i++)
+    for (long long int i = 1; i <= n; i++)
     {
         if (m1_row_pointer[i] == NULL)
-            continue;// To skip null rows
-        for (int j = 1; j <= n; j++)
+            continue; // To skip null rows
+        for (long long int j = 1; j <= n; j++)
         {
             if (m2_col_pointer[j] == NULL)
-                continue;//To skip null columns
+                continue; // To skip null columns
             node temp_row_pointer = m1_row_pointer[i], temp_col_pointer = m2_col_pointer[j];
-            int sum = 0;
+            long long int sum = 0;
             while (temp_row_pointer != NULL && temp_col_pointer != NULL)
             {
                 if ((temp_row_pointer->index_y) == (temp_col_pointer->index_x))
                 {
-                //Matching the condition when there are non-zero elements in positions which can be multiplied
+                    // Matching the condition when there are non-zero elements in positions which can be multiplied
                     sum += ((temp_row_pointer->value) * (temp_col_pointer->value));
 
                     temp_row_pointer = temp_row_pointer->right;
@@ -135,7 +140,7 @@ int main()
                 }
                 else
                 {
-                    //else moving to next positions in x and/or y directions
+                    // else moving to next positions in x and/or y directions
                     if ((temp_row_pointer->index_y) > (temp_col_pointer->index_x))
                     {
                         temp_col_pointer = temp_col_pointer->bottom;
@@ -148,7 +153,7 @@ int main()
             }
             if (sum != 0)
             {
-                printf("%d %d %d\n", i, j, sum);
+                printf("%lld %lld %lld\n", i, j, sum);
                 flag = 1;
             }
         }
@@ -157,7 +162,6 @@ int main()
     {
         printf("NULL MATRIX!");
     }
-    // m nodes are created which is equal to the number of total non-zero enteries in matrix 1 and 2;
-    // hence space complexity is O(m)
+    // m nodes for which space are allocated using malloc are created which is equal to the number of total non-zero enteries in matrix 1 and 2; hence space complexity is O(m)
     return 0;
 }
