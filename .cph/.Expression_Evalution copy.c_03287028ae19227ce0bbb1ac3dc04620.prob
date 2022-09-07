@@ -1,0 +1,1 @@
+{"name":"Local: Expression_Evalution copy","url":"d:\\DSA207\\Expression_Evalution copy.c","tests":[{"id":1662537872652,"input":"3\n4+5","output":""},{"id":1662543783638,"input":"9\n3+8/4/2-7","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\DSA207\\Expression_Evalution copy.c","group":"local","local":true}

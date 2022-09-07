@@ -1,0 +1,1 @@
+{"name":"Local: Express_Evalution","url":"d:\\DSA207\\Express_Evalution.c","tests":[{"id":1662458571901,"input":"9\n3+8/4/2-7","output":"0"},{"id":1662458586237,"input":"9\n5*2+8-7-4","output":"15"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\DSA207\\Express_Evalution.c","group":"local","local":true}
