@@ -15,7 +15,6 @@ typedef struct stud node;
 
 node *Push(node *top, node *ele)
 {
-
     if (top != NULL)
     {
         ele->size = top->size + 1;
@@ -45,7 +44,10 @@ node *Pop(node *top)
         {
             top = NULL;
         }
-        printf("%d\n", diehard->operator);
+        if (diehard->operator== '0')
+            printf("%d", diehard->number);
+        else
+            printf("%c", diehard->operator);
         free(diehard);
     }
     else
@@ -77,65 +79,151 @@ void Size(node *top)
         printf("0\n");
 }
 
+int InsideStackPriority(char instack)
+{
+    if (instack == '+' || instack == '-')
+        return 1;
+    if (instack == '*' || instack == '/')
+        return 2;
+    if (instack == '^')
+        return 3;
+    if (instack == '(')
+        return 0;
+    return 0;
+}
+int OutsideStackPriority(char outstack)
+{
+    if (outstack == '+' || outstack == '-')
+        return 1;
+    if (outstack == '*' || outstack == '/')
+        return 2;
+    if (outstack == '^')
+        return 4;
+    if (outstack == '(')
+        return 5;
+    return 0;
+}
+int power(int x, int y)
+{
+    if (y == 0)
+        return 1;
+    if (y % 2 == 0)
+        return power(x, y / 2) * power(x, y / 2);
+    else
+        return power(x, y / 2) * power(x, y / 2) * x;
+}
+int Evaluate(int x, int y, char operator)
+{
+    if (operator== '+')
+        return x + y;
+    if (operator== '-')
+        return x - y;
+    if (operator== '*')
+        return x * y;
+    if (operator== '/')
+        return x / y;
+    if (operator== '^')
+        return power(x, y);
+    return 0;
+}
 int main()
 {
     int n;
     scanf("%d\n", &n);
-    node *Ntop = NULL, *Ctop = NULL;
+    node *Ntop = NULL, *Otop = NULL;
     char token;
     int flag = 0;
-    scanf("%c", &token);
     // printf("%c",token);
+    // node *ele = (node *)malloc(sizeof(node));
+    // ele->operator= '$';
+    // Otop = Push(Otop, ele);
+    // printf("%c",Otop->operator);
     while (n)
     {
-        int num = 0, f = 1;
+        scanf("%c", &token);
+        // printf("%c-main ",token);
+        int number = 0, f = 1;
         while (token >= '0' && token <= '9')
-        {   
-            if(n==1) {
-                int a;
-                scanf("%d",&a);
-                num = a;
-                n--;
-                flag=1;
-                break;
-            }else{
-            num = (int)(token - '0') + num * f;
-            f = f * 10;
-            flag = 1;
-            scanf("%c", &token);
+        {
+            if (n != 1)
+            {
+                number = (token - '0') + number * f;
+                f = f * 10;
+                scanf("%c", &token);
+                flag = 1;
+                // printf(" %c-cha ",token);
+                // printf("%d-ka ",number);
             }
-            // printf("%c",token);
+            else
+            {
+
+                scanf("%c", &number);
+                // printf("%c-da ",token);
+                number = token - '0';
+                flag = 1;
+                break;
+            }
         }
-        if (flag == 1 && n!=0)
+        if (flag)
         {
-            n--;
             node *ele = (node *)malloc(sizeof(node));
-            ele->number = num;
-            printf("%d",num);
-            Push(Ntop, ele);
-            n--;
-            node *ele2 = (node *)malloc(sizeof(node));
-            ele2->operator= token;
-            Push(Ctop, ele2);
+            ele->number = number;
+            ele->operator= 0;
+            Ntop = Push(Ntop, ele);
+            printf("%d-ins ", number);
             flag = 0;
-        }else if(flag==1 && n==0){
-            node *ele=(node *)malloc(sizeof(node));
-            ele->number=num;
-            Push(Ntop,ele);
-            break;
-        }
-        else
-        {
             n--;
-            node *ele= (node *)malloc(sizeof(node));
-            ele->operator=token;
-            Push(Ctop,ele);
         }
-        if (n)
+        if (n == 0)
+            break;
+        if (flag == 0)
         {
-            scanf("%d", &token);
+            node *ele = (node *)malloc(sizeof(node));
+            ele->operator= token;
+            ele->operator= '0';
+            printf("%c-ins %c ", token,Otop->operator);
+            
+            // if (Otop!=NULL)
+            // {
+            //     printf(" activated ");
+            //     while (InsideStackPriority(Otop->operator) >= OutsideStackPriority(token) || Otop->next!=NULL)
+            //     {
+            //         int x, y, ans;
+            //         x = Ntop->number;
+            //         Ntop = Pop(Ntop);
+            //         y = Ntop->number;
+            //         Ntop = Pop(Ntop);
+            //         printf("%d-kachak-%d", x, y);
+            //         ans = Evaluate(x, y, Otop->operator);
+            //         node *sub = (node *)malloc(sizeof(node));
+            //         sub->number = ans;
+            //         Ntop = Push(Ntop, sub);
+            //         Otop = Pop(Otop);
+            //     }
+            // }
+
+            Push(Otop, ele);
+            n--;
         }
+        if (n == 0)
+            break;
     }
-    printf("%d %c",Ntop->number,Ctop->operator);
+    // while (Otop!=NULL)
+    // {  
+    //     printf("activated2");
+    //     int x, y, ans;
+    //     x = Ntop->number;
+    //     Ntop = Pop(Ntop);
+    //     y = Ntop->number;
+    //     Ntop = Pop(Ntop);
+    //     printf("%d-kachak-%d", x, y);
+    //     ans = Evaluate(x, y, Otop->operator);
+    //     node *sub = (node *)malloc(sizeof(node));
+    //     sub->number = ans;
+    //     Ntop = Push(Ntop, sub);
+    //     Otop = Pop(Otop);
+    // }
+    // printf("%d ", Evaluate(4, 5, '^'));
+    printf("\n%d ", Ntop->number);
     return 0;
 }

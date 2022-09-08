@@ -134,9 +134,9 @@ int main()
     char token;
     int flag = 0;
     // printf("%c",token);
-    node *ele = (node *)malloc(sizeof(node));
-    ele->operator= '$';
-    Otop = Push(Otop, ele);
+    // node *ele = (node *)malloc(sizeof(node));
+    // ele->operator= '$';
+    // Otop = Push(Otop, ele);
     // printf("%c",Otop->operator);
     while (n)
     {
@@ -183,24 +183,24 @@ int main()
             ele->operator= '0';
             printf("%c-ins %c ", token,Otop->operator);
             
-            if (Otop->operator!= '$')
-            {
-                printf(" activated ");
-                while (InsideStackPriority(Otop->operator) >= OutsideStackPriority(token) || Otop->operator!= '$')
-                {
-                    int x, y, ans;
-                    x = Ntop->number;
-                    Ntop = Pop(Ntop);
-                    y = Ntop->number;
-                    Ntop = Pop(Ntop);
-                    printf("%d-kachak-%d", x, y);
-                    ans = Evaluate(x, y, Otop->operator);
-                    node *sub = (node *)malloc(sizeof(node));
-                    sub->number = ans;
-                    Push(Ntop, sub);
-                    Otop = Pop(Otop);
-                }
-            }
+            // if (Otop!=NULL)
+            // {
+            //     printf(" activated ");
+            //     while (InsideStackPriority(Otop->operator) >= OutsideStackPriority(token) || Otop!=NULL)
+            //     {
+            //         int x, y, ans;
+            //         x = Ntop->number;
+            //         Ntop = Pop(Ntop);
+            //         y = Ntop->number;
+            //         Ntop = Pop(Ntop);
+            //         printf("%d-kachak-%d", x, y);
+            //         ans = Evaluate(x, y, Otop->operator);
+            //         node *sub = (node *)malloc(sizeof(node));
+            //         sub->number = ans;
+            //         Ntop = Push(Ntop, sub);
+            //         Otop = Pop(Otop);
+            //     }
+            // }
 
             Push(Otop, ele);
             n--;
@@ -208,21 +208,21 @@ int main()
         if (n == 0)
             break;
     }
-    while (Otop->operator!= '$')
-    {  
-        printf("activated2");
-        int x, y, ans;
-        x = Ntop->number;
-        Ntop = Pop(Ntop);
-        y = Ntop->number;
-        Ntop = Pop(Ntop);
-        printf("%d-kachak-%d", x, y);
-        ans = Evaluate(x, y, Otop->operator);
-        node *sub = (node *)malloc(sizeof(node));
-        sub->number = ans;
-        Push(Ntop, sub);
-        Otop = Pop(Otop);
-    }
+    // while (Otop!=NULL)
+    // {  
+    //     printf("activated2");
+    //     int x, y, ans;
+    //     x = Ntop->number;
+    //     Ntop = Pop(Ntop);
+    //     y = Ntop->number;
+    //     Ntop = Pop(Ntop);
+    //     printf("%d-kachak-%d", x, y);
+    //     ans = Evaluate(x, y, Otop->operator);
+    //     node *sub = (node *)malloc(sizeof(node));
+    //     sub->number = ans;
+    //     Ntop = Push(Ntop, sub);
+    //     Otop = Pop(Otop);
+    // }
     // printf("%d ", Evaluate(4, 5, '^'));
     printf("\n%d ", Ntop->number);
     return 0;
