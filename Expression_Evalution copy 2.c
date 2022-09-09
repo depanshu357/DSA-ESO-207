@@ -139,6 +139,7 @@ int main()
             {
                 Ntop->number = (Ntop->number) * f + (int)(token - '0');
                 f = f * 10;
+                printf(" %d-modi ",Ntop->number);
             }
             else
             {
@@ -154,8 +155,9 @@ int main()
         {
             node *help = (node *)malloc(sizeof(node));
             help->operator= token;
-            if(Otop!=NULL)
-if(InsideStackPriority(Otop->operator) >= OutsideStackPriority(token))
+            // if(Otop!=NULL)
+            
+            while (Otop != NULL && InsideStackPriority(Otop->operator) >= OutsideStackPriority(token))
             {
                 int x, y, ans, flag = 0;
                 if (Ntop != NULL && Ntop->size >= 2)
@@ -164,13 +166,13 @@ if(InsideStackPriority(Otop->operator) >= OutsideStackPriority(token))
                     if (Ntop != NULL)
                     {
                         x = Ntop->number;
-                        // Ntop = Pop(Ntop);
+                        Ntop = Pop(Ntop);
                         printf(" %d-xa ", x);
                         flag++;
                     }
                     if (Ntop != NULL)
                     {
-                        y = Ntop->next->number;
+                        y = Ntop->number;
                         Ntop = Pop(Ntop);
                         printf(" %d-ya ", y);
                         flag++;
@@ -193,6 +195,13 @@ if(InsideStackPriority(Otop->operator) >= OutsideStackPriority(token))
         }
         pretoken = token;
     }
-    printf("\n%d %c ", Ntop->number, Otop->operator);
+       int x,y,ans;
+    if(Otop!=NULL){
+       x= Ntop->number;
+       y=Ntop->next->number;
+       ans = Evaluate(y,x,Otop->operator);
+    }
+    printf("\n%d %c \n", Ntop->next->number, Otop->operator);
+    printf(" %d ",ans);
     return 0;
 }
