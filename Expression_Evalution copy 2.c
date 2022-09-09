@@ -154,9 +154,9 @@ int main()
         {
             node *help = (node *)malloc(sizeof(node));
             help->operator= token;
-            // if(Otop!=NULL)
-            // if (Otop != NULL || InsideStackPriority(Otop->operator) >= OutsideStackPriority(token))
-            // {
+            if(Otop!=NULL)
+if(InsideStackPriority(Otop->operator) >= OutsideStackPriority(token))
+            {
                 int x, y, ans, flag = 0;
                 if (Ntop != NULL && Ntop->size >= 2)
                 {
@@ -187,7 +187,7 @@ int main()
                     }
                     flag = 0;
                 }
-            // }
+            }
             Otop = Push(Otop, help);
             printf(" %c-ins ", help->operator);
         }
