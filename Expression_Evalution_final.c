@@ -3,40 +3,31 @@
 #include <math.h>
 #include <stdlib.h>
 
-struct stud
+struct LinkedList
 {
-    char operator;
-    int number;
-    int size;
-    struct stud *next;
+    int value;
+    struct LinkedList *next;
 };
 
-typedef struct stud node;
+typedef struct LinkedList *node;
 
-node *Push(node *top, node *ele)
+node Push(int token, node stack_head)
 {
-    if (top != NULL)
-    {
-        ele->size = top->size + 1;
-        ele->next = top;
-        top = ele;
-    }
-    else
-    {
-        ele->next = NULL;
-        ele->size = 1;
-        top = ele;
-    }
-    return top;
+    node help = (node)malloc(sizeof(struct LinkedList));
+    help->value = token;
+    help->next = stack_head;
+    stack_head = help;
+
+    return stack_head;
 }
 
-node *Pop(node *top)
+node Pop(node top)
 {
 
     if (top != NULL)
     {
-        node *diehard = top;
-        if (top->size != 1)
+        node temp = top;
+        if (top->next != NULL)
         {
             top = top->next;
         }
@@ -44,20 +35,17 @@ node *Pop(node *top)
         {
             top = NULL;
         }
-        free(diehard);
+        free(temp);
     }
-    // else
-    // {
-        // printf("!\n");
-    // }
+
     return top;
 }
 
-void Top(node *top)
+void Top(node top)
 {
     if (top != NULL)
     {
-        printf("%d\n", top->operator);
+        printf("%d\n", top->value);
     }
     else
     {
@@ -65,37 +53,27 @@ void Top(node *top)
     }
 }
 
-void Size(node *top)
+int InsideStackPriority(char inside_stack)
 {
-    if (top != NULL)
-    {
-        printf("%d\n", top->size);
-    }
-    else
-        printf("0\n");
-}
-
-int InsideStackPriority(char instack)
-{
-    if (instack == '+' || instack == '-')
+    if (inside_stack == '+' || inside_stack == '-')
         return 1;
-    if (instack == '*' || instack == '/')
+    if (inside_stack == '*' || inside_stack == '/')
         return 2;
-    if (instack == '^')
+    if (inside_stack == '^')
         return 3;
-    if (instack == '(')
+    if (inside_stack == '(')
         return 0;
     return 0;
 }
-int OutsideStackPriority(char outstack)
+int OutsideStackPriority(char outside_stack)
 {
-    if (outstack == '+' || outstack == '-')
+    if (outside_stack == '+' || outside_stack == '-')
         return 1;
-    if (outstack == '*' || outstack == '/')
+    if (outside_stack == '*' || outside_stack == '/')
         return 2;
-    if (outstack == '^')
+    if (outside_stack == '^')
         return 4;
-    if (outstack == '(')
+    if (outside_stack == '(')
         return 5;
     return 0;
 }
@@ -108,17 +86,17 @@ int power(int x, int y)
     else
         return power(x, y / 2) * power(x, y / 2) * x;
 }
-int Evaluate(int x, int y, char operator)
+int Evaluate(int x, int y, char value)
 {
-    if (operator== '+')
+    if (value == '+')
         return x + y;
-    if (operator== '-')
+    if (value == '-')
         return x - y;
-    if (operator== '*')
+    if (value == '*')
         return x * y;
-    if (operator== '/')
+    if (value == '/')
         return x / y;
-    if (operator== '^')
+    if (value == '^')
         return power(x, y);
     return 0;
 }
@@ -126,7 +104,7 @@ int main()
 {
     int n;
     scanf("%d\n", &n);
-    node *Ntop = NULL, *Otop = NULL;
+    node number_stack = NULL, operator_stack = NULL;
     int flag = 0;
     char token, pretoken = '$', f = 1;
     int ans;
@@ -138,90 +116,66 @@ int main()
         {
             if (pretoken >= '0' && pretoken <= '9')
             {
-                Ntop->number = (Ntop->number) * f + (int)(token - '0');
-                f =  10;
-                // printf(" %d-modi ", Ntop->number);
+                number_stack->value = (number_stack->value) * f + (int)(token - '0');
+                f = 10;
             }
             else
             {
-                node *help = (node *)malloc(sizeof(node));
-                help->number = token - '0';
-                Ntop = Push(Ntop, help);
-                // printf("%d-ins ", help->number);
+
+                number_stack = Push(token - '0', number_stack);
                 f = 10;
             }
             int flag = 0;
-        }else if(token==')'){
-            while(Otop->operator!='('){
-                // printf(" khachak ");
-                int x,y;
-                x= Ntop->number;
-                Ntop = Pop(Ntop);
-                y= Ntop->number;
-                int k = Evaluate(y,x,Otop->operator);
-                Ntop->number = k;
-                Otop = Pop(Otop);
+        }
+        else if (token == ')')
+        {
+            while (operator_stack->value != '(')
+            {
+                int x, y;
+                x = number_stack->value;
+                number_stack = Pop(number_stack);
+                y = number_stack->value;
+                int k = Evaluate(y, x, operator_stack->value);
+                number_stack->value = k;
+                operator_stack = Pop(operator_stack);
             }
-            Otop = Pop(Otop);
+            operator_stack = Pop(operator_stack);
         }
         else
         {
-            node *help = (node *)malloc(sizeof(node));
-            help->operator= token;
-            // if (Otop != NULL)
-                
-                while (Otop != NULL && InsideStackPriority(Otop->operator) > OutsideStackPriority(token))
+
+            while (operator_stack != NULL && InsideStackPriority(operator_stack->value) > OutsideStackPriority(token))
+            {
+                int x, y;
+                if (number_stack != NULL)
                 {
-                    int x, y, flag = 0;
-                    if (Ntop != NULL)
-                    {
-                        x = Ntop->number;
-                        Ntop = Pop(Ntop);
-                        // printf(" %d-xa ", x);
-                        flag++;
-                        y = Ntop->number;
-                        Ntop = Pop(Ntop);
-                        // printf(" %d-ya ", y);
-                        flag++;
-                        if (flag == 2)
-                        {
-                            ans = Evaluate(y, x, Otop->operator);
-                            node *sub = (node *)malloc(sizeof(node));
-                            sub->number = ans;
-                            // printf("%d-ans ", ans);
-                            Ntop = Push(Ntop, sub);
-                            Otop = Pop(Otop);
-                        }
-                        flag = 0;
-                    }
+                    x = number_stack->value;
+                    number_stack = Pop(number_stack);
+                    y = number_stack->value;
+                    number_stack = Pop(number_stack);
+                    ans = Evaluate(y, x, operator_stack->value);
+
+                    number_stack = Push(ans, number_stack);
+                    operator_stack = Pop(operator_stack);
                 }
-            Otop = Push(Otop, help);
-            // printf(" %c-ins ", help->operator);
+            }
+            operator_stack = Push(token, operator_stack);
         }
         pretoken = token;
     }
-    while(Otop != NULL)
-    {   
-        // printf(" last check\n");
+    while (operator_stack != NULL)
+    {
         int x, y;
-        if (Ntop->size == 1){
-            ans = Ntop->number;
-        }
-        else
-        {
-            x = Ntop->number;
-            Ntop = Pop(Ntop);
-            y = Ntop->number;
-            Ntop = Pop(Ntop);
-            ans = Evaluate(y, x, Otop->operator);
-            node *sub = (node *)malloc(sizeof(node));
-            sub->number = ans;
-            Ntop = Push(Ntop,sub);
-            Otop = Pop(Otop);
-        }
+        x = number_stack->value;
+        number_stack = Pop(number_stack);
+        y = number_stack->value;
+        number_stack = Pop(number_stack);
+        ans = Evaluate(y, x, operator_stack->value);
+
+        number_stack = Push(ans, number_stack);
+        operator_stack = Pop(operator_stack);
     }
-    Otop = Pop(Otop);
-    // printf("\n%d  %d \n", Ntop->number,Ntop->size);
-    printf("%d",Ntop->number );
+    operator_stack = Pop(operator_stack);
+    printf("%d", number_stack->value);
     return 0;
 }
