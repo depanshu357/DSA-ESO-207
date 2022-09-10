@@ -23,7 +23,7 @@ node *Push(node *top, node *ele)
     }
     else
     {
-        ele->next = top;
+        ele->next = NULL;
         ele->size = 1;
         top = ele;
     }
@@ -46,10 +46,10 @@ node *Pop(node *top)
         }
         free(diehard);
     }
-    else
-    {
-        printf("!\n");
-    }
+    // else
+    // {
+        // printf("!\n");
+    // }
     return top;
 }
 
@@ -128,7 +128,7 @@ int main()
     scanf("%d\n", &n);
     node *Ntop = NULL, *Otop = NULL;
     int flag = 0;
-    char token, pretoken = '$', f = 10;
+    char token, pretoken = '$', f = 1;
     int ans;
     while (n)
     {
@@ -139,7 +139,7 @@ int main()
             if (pretoken >= '0' && pretoken <= '9')
             {
                 Ntop->number = (Ntop->number) * f + (int)(token - '0');
-                f = f * 10;
+                f =  10;
                 printf(" %d-modi ", Ntop->number);
             }
             else
@@ -151,38 +151,32 @@ int main()
                 f = 10;
             }
             int flag = 0;
-        }
-        else if (token == ')')
-        {
-            while (Otop->operator!= '(' && Otop != NULL)
-            {
-                printf("khachak\n");
-                char c = Otop->operator;
+        }else if(token==')'){
+            if(Otop->operator=='('){
+
+            }
+            while(Otop->operator!='('){
+                printf(" khachak ");
+                int x,y;
+                x= Ntop->number;
+                Ntop = Pop(Ntop);
+                y= Ntop->number;
+                int k = Evaluate(y,x,Otop->operator);
+                Ntop->number = k;
                 Otop = Pop(Otop);
-                int x, y, ans;
-                if (Ntop != NULL)
-                {
-                    x = Ntop->number;
-                    Ntop = Pop(Ntop);
-                }
-                if (Ntop != NULL)
-                {
-                    y = Ntop->number;
-                    Ntop = Pop(Ntop);
-                }
-                Otop = Pop(Otop);
-                ans  = Evaluate(y, x, c);
             }
             Otop = Pop(Otop);
-        }else
+        }
+        else
         {
             node *help = (node *)malloc(sizeof(node));
             help->operator= token;
-            if (Otop != NULL)
-                while (Otop != NULL && InsideStackPriority(Otop->operator) >= OutsideStackPriority(token))
+            // if (Otop != NULL)
+                
+                while (Otop != NULL && InsideStackPriority(Otop->operator) > OutsideStackPriority(token))
                 {
                     int x, y, flag = 0;
-                    if (Ntop != NULL && Ntop->size >= 2)
+                    if (Ntop != NULL)
                     {
                         x = Ntop->number;
                         Ntop = Pop(Ntop);
@@ -210,17 +204,28 @@ int main()
         }
         pretoken = token;
     }
-    if (Otop != NULL)
-    {
-    int x, y;
-        x = Ntop->number;
-        y = Ntop->next->number;
-        ans = Evaluate(y, x, Otop->operator);
-        // Otop = Pop(Otop);
-        // Ntop=Pop(Ntop);
-        // Ntop = Pop(Ntop);
+    while(Otop != NULL)
+    {   
+        printf(" last check\n");
+        int x, y;
+        if (Ntop->size == 1){
+            ans = Ntop->number;
+        }
+        else
+        {
+            x = Ntop->number;
+            Ntop = Pop(Ntop);
+            y = Ntop->number;
+            Ntop = Pop(Ntop);
+            ans = Evaluate(y, x, Otop->operator);
+            node *sub = (node *)malloc(sizeof(node));
+            sub->number = ans;
+            Ntop = Push(Ntop,sub);
+            Otop = Pop(Otop);
+        }
     }
-    printf("\n%d %c \n", Ntop->number, Otop->operator);
-    printf(" %d ", ans);
+    Otop = Pop(Otop);
+    printf("\n%d  %d \n", Ntop->number,Ntop->size);
+    printf(" %d ",Ntop->number );
     return 0;
 }
