@@ -105,7 +105,6 @@ int main()
     int n;
     scanf("%d\n", &n);
     node number_stack = NULL, operator_stack = NULL;
-    int flag = 0;
     char token, pretoken = '$', f = 1;
     int ans;
     while (n)
@@ -125,7 +124,6 @@ int main()
                 number_stack = Push(token - '0', number_stack);
                 f = 10;
             }
-            int flag = 0;
         }
         else if (token == ')')
         {
@@ -171,7 +169,6 @@ int main()
         y = number_stack->value;
         number_stack = Pop(number_stack);
         ans = Evaluate(y, x, operator_stack->value);
-
         number_stack = Push(ans, number_stack);
         operator_stack = Pop(operator_stack);
     }

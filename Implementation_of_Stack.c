@@ -3,105 +3,101 @@
 #include <math.h>
 #include <stdlib.h>
 
-struct stud
+struct LinkedList
 {
-    int element;
-    int size;
-    struct stud *next;
+    int value;
+    struct LinkedList *next;
 };
-typedef struct stud node;
 
-node *Push(node *top,node *ele)
+typedef struct LinkedList *node;
+
+node Push(int token, node stack_head)
 {
+    node help = (node)malloc(sizeof(struct LinkedList));
+    help->value = token;
+    help->next = stack_head;
+    stack_head = help;
 
-    if (top != NULL)
-    {
-        ele->size = top->size + 1;
-        ele->next = top;
-        top = ele;
-    }
-    else
-    {
-        ele->next = top;
-        ele->size = 1;
-        top = ele;
-    }
-    return top;
+    return stack_head;
 }
 
-node *Pop(node *top)
+node Pop(node top)
 {
 
     if (top != NULL)
     {
-        node *diehard = top;
-        if (top->size != 1){
+        node temp = top;
+        if (top->next != NULL)
+        {
             top = top->next;
         }
-        else{
+        else
+        {
             top = NULL;
         }
-            printf("%d\n",diehard->element);
-        free(diehard);
+        free(temp);
     }
-    else
-    {
-        printf("!\n");
-    }
+
     return top;
 }
 
-void Top(node *top)
+void Top(node top)
 {
     if (top != NULL)
     {
-        printf("%d\n", top->element);
+        printf("%d\n", top->value);
     }
     else
     {
         printf("!\n");
     }
 }
-
-void Size(node *top)
+void Size(node top)
 {
-    if (top != NULL)
-    {
-        printf("%d\n", top->size);
-    }
-    else
+    if (top == NULL)
         printf("0\n");
+    else
+    {
+        node temp = top;
+        int count = 0;
+        while (temp != NULL)
+        {
+            temp = temp->next;
+            count++;
+        }
+        printf("%d\n", count);
+    }
 }
-
 int main()
 {
     int n;
-    scanf("%d", &n);
-    node *top=NULL;
+    scanf("%d\n", &n);
+    node stack = NULL;
     while (n--)
     {
         int instruction;
         scanf("%d", &instruction);
         if (instruction == 0)
         {
-            int element;
-            scanf("%d", &element);
-            node *ele = (node *)malloc(sizeof(node));
-            ele->element = element;
-            top = Push(top,ele);
+            int number;
+            scanf("%d", &number);
+            stack = Push(number, stack);
         }
         else if (instruction == 1)
         {
-            top = Pop(top);
+            if (stack != NULL)
+                printf("%d\n", stack->value);
+            else
+                printf("!\n");
+            stack = Pop(stack);
         }
         else if (instruction == 2)
         {
-            Top(top);
+            Top(stack);
         }
-        else if (instruction == 3)
+        else
         {
-            Size(top);
+            Size(stack);
         }
     }
-    return 0;
 }
