@@ -140,23 +140,20 @@ int main()
             {
                 Ntop->number = (Ntop->number) * f + (int)(token - '0');
                 f =  10;
-                printf(" %d-modi ", Ntop->number);
+                // printf(" %d-modi ", Ntop->number);
             }
             else
             {
                 node *help = (node *)malloc(sizeof(node));
                 help->number = token - '0';
                 Ntop = Push(Ntop, help);
-                printf("%d-ins ", help->number);
+                // printf("%d-ins ", help->number);
                 f = 10;
             }
             int flag = 0;
         }else if(token==')'){
-            if(Otop->operator=='('){
-
-            }
             while(Otop->operator!='('){
-                printf(" khachak ");
+                // printf(" khachak ");
                 int x,y;
                 x= Ntop->number;
                 Ntop = Pop(Ntop);
@@ -180,19 +177,18 @@ int main()
                     {
                         x = Ntop->number;
                         Ntop = Pop(Ntop);
-                        printf(" %d-xa ", x);
+                        // printf(" %d-xa ", x);
                         flag++;
                         y = Ntop->number;
                         Ntop = Pop(Ntop);
-                        printf(" %d-ya ", y);
+                        // printf(" %d-ya ", y);
                         flag++;
                         if (flag == 2)
                         {
-
                             ans = Evaluate(y, x, Otop->operator);
                             node *sub = (node *)malloc(sizeof(node));
                             sub->number = ans;
-                            printf("%d-ans ", ans);
+                            // printf("%d-ans ", ans);
                             Ntop = Push(Ntop, sub);
                             Otop = Pop(Otop);
                         }
@@ -200,13 +196,13 @@ int main()
                     }
                 }
             Otop = Push(Otop, help);
-            printf(" %c-ins ", help->operator);
+            // printf(" %c-ins ", help->operator);
         }
         pretoken = token;
     }
     while(Otop != NULL)
     {   
-        printf(" last check\n");
+        // printf(" last check\n");
         int x, y;
         if (Ntop->size == 1){
             ans = Ntop->number;
@@ -225,7 +221,7 @@ int main()
         }
     }
     Otop = Pop(Otop);
-    printf("\n%d  %d \n", Ntop->number,Ntop->size);
-    printf(" %d ",Ntop->number );
+    // printf("\n%d  %d \n", Ntop->number,Ntop->size);
+    printf("%d",Ntop->number );
     return 0;
 }
