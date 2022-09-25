@@ -1,6 +1,4 @@
 #include <stdio.h>
-#include <string.h>
-#include <math.h>
 #include <stdlib.h>
 
 struct LinkedList
@@ -58,25 +56,30 @@ int InsideStackPriority(char inside_stack)
     if (inside_stack == '+' || inside_stack == '-')
         return 1;
     if (inside_stack == '*' || inside_stack == '/')
-        return 2;
-    if (inside_stack == '^')
         return 3;
+    if (inside_stack == '^')
+        return 5;
     if (inside_stack == '(')
         return 0;
     return 0;
 }
 int OutsideStackPriority(char outside_stack)
 {
-    if (outside_stack == '+' || outside_stack == '-')
+    if (outside_stack == '+')
         return 1;
-    if (outside_stack == '*' || outside_stack == '/')
+    if (outside_stack == '-')
         return 2;
-    if (outside_stack == '^')
+    if (outside_stack == '*')
+        return 3;
+    if (outside_stack == '/')
         return 4;
+    if (outside_stack == '^')
+        return 6;
     if (outside_stack == '(')
-        return 5;
+        return 7;
     return 0;
 }
+// Function to get the power
 int power(int x, int y)
 {
     if (y == 0)
@@ -86,6 +89,8 @@ int power(int x, int y)
     else
         return power(x, y / 2) * power(x, y / 2) * x;
 }
+
+// Function to perform operation
 int Evaluate(int x, int y, char value)
 {
     if (value == '+')
@@ -105,22 +110,23 @@ int main()
     int n;
     scanf("%d\n", &n);
     node number_stack = NULL, operator_stack = NULL;
-    char token, pretoken = '$', f = 1;
+    char token, preToken = '$';
+    int f = 1;
     int ans;
+
     while (n)
     {
         scanf("%c", &token);
         n--;
         if (token >= '0' && token <= '9')
         {
-            if (pretoken >= '0' && pretoken <= '9')
+            if (preToken >= '0' && preToken <= '9')
             {
                 number_stack->value = (number_stack->value) * f + (int)(token - '0');
-                f = 10;
+                f = 10; // To increase the decimal place of the number by one
             }
             else
             {
-
                 number_stack = Push(token - '0', number_stack);
                 f = 10;
             }
@@ -142,7 +148,7 @@ int main()
         else
         {
 
-            while (operator_stack != NULL && InsideStackPriority(operator_stack->value) > OutsideStackPriority(token))
+            while (operator_stack != NULL && InsideStackPriority(operator_stack->value) >= OutsideStackPriority(token))
             {
                 int x, y;
                 if (number_stack != NULL)
@@ -159,7 +165,7 @@ int main()
             }
             operator_stack = Push(token, operator_stack);
         }
-        pretoken = token;
+        preToken = token;
     }
     while (operator_stack != NULL)
     {
