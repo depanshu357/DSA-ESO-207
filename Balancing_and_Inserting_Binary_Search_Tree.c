@@ -51,20 +51,61 @@ node *Ins(node *root, int x)
             // printf("r ");
         }
     }
+    int LeftCount = Count(root->left);
+    int RightCount = Count(root->right);
+    if (LeftCount > 3 * RightCount)
+    {
+        printf("left is heavy");
+    }
+    else if (RightCount > 3 * LeftCount)
+    {
+        printf("Right is heavy");
+    }
     return root;
 }
 
-node *Traversal(node *root)
+node *Traversal(node *root, int *count)
 {
+    // To print all elements from left to right
     if (root == NULL)
+    {
         return root;
+    }
     node *pre = root;
-    Traversal(root->left);
+    Traversal(root->left, count);
     if (root != NULL)
+    {
+        (*count)++;
         printf("%d ", root->element);
-    Traversal(root->right);
+    }
+    Traversal(root->right, count);
     return root;
 }
+
+int CountHelp(node *root, int *count)
+{
+
+    if (root == NULL)
+    {
+        return *count;
+    }
+    node *pre = root;
+    CountHelp(root->left, count);
+    if (root != NULL)
+    {
+        (*count)++;
+    }
+    CountHelp(root->right, count);
+    return *count;
+}
+
+int Count(node *root)
+{
+    // To count number of nodes in Tree
+    int count = 0;
+    return CountHelp(root, &count);
+}
+
 int main()
 {
     int n;
@@ -82,7 +123,9 @@ int main()
         root = Ins(root, arr[i]);
     }
     if (root == NULL)
-        printf("What t f");
-    Traversal(root);
+        printf("WTF");
+    int count = 0;
+    Traversal(root, &count);
+    printf("%d ", Count(root));
     return 0;
 }
