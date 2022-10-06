@@ -79,6 +79,18 @@ void MakeBST(node *root, int start, int end)
     MakeBST(globalArr[mid],mid+1,end);
 }
 
+void CheckAndMakeBST(node *root){
+    int LeftCount = Count(root->left);
+    int RightCount = Count(root->right);
+    int TotalCount = LeftCount + RightCount +1;
+    if( 3*TotalCount < 4*LeftCount || 3*TotalCount < 4*RightCount){
+        int count = 0;
+        count = MakeArr(root, &count);
+        MakeBST(root,0,TotalCount-1);
+    }
+    return;
+}
+
 node *Traversal(node *root)
 {
     // To print all elements from left to right
@@ -95,7 +107,7 @@ node *Traversal(node *root)
     Traversal(root->right);
     return root;
 }
-
+ 
 node *Ins(node *root, int x)
 {
     node *curr = root;
@@ -148,18 +160,13 @@ node *Ins(node *root, int x)
     // {
     //     printf("Right is heavy ");
     // }
-    printf("%d %d \n",LeftCount,RightCount);
+    // printf("%d %d \n",LeftCount,RightCount);
     if ((4*(LeftCount+RightCount) > 3 * RightCount +1) || (4*(RightCount+LeftCount) > 3 * LeftCount +1))
     {
         int count = 0;
         count = MakeArr(root, &count);
-        printf("%d ", count);
-        MakeBST(root, 0, count - 1);
-        // Traversal(root);    
-        // for(int i=0;i<count ;i++) printf("%d ",globalArr[i]->element);
-        // printf("\n");
-        // printf("%d",Count(root));
-        // printf("activated");
+        // printf("%d ", count);
+        // MakeBST(root, 0, count - 1);
     }
     return root;
 }
@@ -169,7 +176,7 @@ node *Ins(node *root, int x)
 int main()
 {
     int n;
-    scanf("%d", &n);
+    scanf("%d", &n);  
     int arr[n];
     for (int i = 0; i < n; i++)
     {
@@ -185,11 +192,10 @@ int main()
     if (root == NULL)
         printf("WTF");
     int count = 0;
-    // printf("\n%d\n", Count(root));
-    // for (int i = 0; i < Count(root); i++)
-        // printf("%d ", globalArr[i]->element);
-    // Traversal(root, &count);
+    // Traversal(root);
+    count = Count(root);
     // printf("%d",root->element);
-
+    MakeBST(root,0,count-1);
+    for(int i=0;i<count;i++) printf("%d ",globalArr[i]->element);
     return 0;
 }
