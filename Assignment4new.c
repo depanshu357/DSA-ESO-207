@@ -173,7 +173,7 @@ int main()
     root = NULL;
 
     FILE *fpt;
-    fpt = fopen("Time_Required3.csv","w+");
+    fpt = fopen("Time_Required1.csv","w+");
     fprintf(fpt,"Number_Inserted,Time_Taken\n");
     
         double total_t=0;
@@ -185,8 +185,8 @@ int main()
         IsBalanced(root, arr[i]);
         end_t = clock();
         // CLOCKS_PER_SEC is a constant defined in time.h and its value is 10^6.
-        total_t = ((double)(end_t - start_t) / CLOCKS_PER_SEC);
-        if((100000)<=(i+1) && (i+1)<=(1000000)){
+        total_t += ((double)(end_t - start_t) / CLOCKS_PER_SEC);
+        if((i+1)%(50000)==0 ){
         fprintf(fpt,"%d, %f\n",i+1,total_t);
         }
     }
