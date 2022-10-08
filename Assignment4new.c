@@ -25,7 +25,7 @@ node *Traversal(node *root)
     Traversal(root->left);
     if (root != NULL)
     {
-        printf("%d ", root->element);
+        printf(" %d subtree_size = %d\n", root->element,root->subtree_size);
     }
     Traversal(root->right);
     return root;
@@ -59,7 +59,7 @@ node *ConvertArrayToBST(node *arr[], int start, int end)
     int mid = (start + end) / 2;
     node *root;
     root = arr[mid];
-    root->subtree_size = end - start;
+    root->subtree_size = end - start+1;
 
     // Recursively construct the left subtree and make left child of root
     root->left = ConvertArrayToBST(arr, start, mid - 1);
@@ -74,14 +74,22 @@ node *ConvertToPerfectlyBalanced(node *root)
 {
     node *arr[n];
     ConvertBSTtoArray(root, arr, 0);
+    printf("activated");
+    // for(int i=0;i<n;i++)printf("%d ",arr[i]->element);
+    printf("\n");
 
     node *temp = ConvertArrayToBST(arr, 0, root->subtree_size);
     return temp;
 }
-
-void IsBalanced(node *root, int x)
+int check(node *curr){
+    if(curr->left==NULL || curr->right==NULL)return 0;
+    if(4*(curr->left->subtree_size)>3*(curr->subtree_size)) return 1;
+    if(4*(curr->right->subtree_size)>3*(curr->subtree_size))return 1;
+    return 0;
+}
+node *IsBalanced(node *root, int x)
 {
-    if (root = NULL)
+    if (root == NULL)
     {
         return;
     }
@@ -89,7 +97,7 @@ void IsBalanced(node *root, int x)
     node *curr = root;
     while (curr != NULL)
     {
-        if (4 * (curr->left ? curr->left->subtree_size : -1) > 3 * curr->subtree_size || 4 * (curr->right ? curr->right->subtree_size : -1) > 3 * curr->subtree_size)
+        if (check(curr))
         {
             node *temp = ConvertToPerfectlyBalanced(curr);
             if (curr->element < pre->element)
@@ -124,7 +132,7 @@ node *Ins(node *root, int x)
     temp->element = x;
     temp->left = NULL;
     temp->right = NULL;
-    temp->subtree_size = 0;
+    temp->subtree_size = 1;
 
     while (curr != NULL)
     {
@@ -172,25 +180,25 @@ int main()
     node *root;
     root = NULL;
 
-    FILE *fpt;
-    fpt = fopen("Time_Required1.csv","w+");
-    fprintf(fpt,"Number_Inserted,Time_Taken\n");
+    // FILE *fpt;
+    // fpt = fopen("Time_Required1.csv","w+");
+    // fprintf(fpt,"Number_Inserted,Time_Taken\n");
     
-        double total_t=0;
+        // double total_t=0;
     for (int i = 0; i < n; i++)
     {
-        clock_t start_t, end_t;
-        start_t = clock();
+        // clock_t start_t, end_t;
+        // start_t = clock();
         root = Ins(root, arr[i]);
-        IsBalanced(root, arr[i]);
-        end_t = clock();
+        root = IsBalanced(root, arr[i]);
+        // end_t = clock();
         // CLOCKS_PER_SEC is a constant defined in time.h and its value is 10^6.
-        total_t += ((double)(end_t - start_t) / CLOCKS_PER_SEC);
-        if((i+1)%(50000)==0 ){
-        fprintf(fpt,"%d, %f\n",i+1,total_t);
-        }
+        // total_t += ((double)(end_t - start_t) / CLOCKS_PER_SEC);
+        // if((i+1)%(50000)==0 ){
+        // fprintf(fpt,"%d, %f\n",i+1,total_t);
+        // }
     }
-    fclose(fpt);
-    // Traversal(root);  
+    // fclose(fpt);
+    Traversal(root);  
     return 0;
 }

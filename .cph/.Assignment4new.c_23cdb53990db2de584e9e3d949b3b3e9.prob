@@ -1,1 +1,1 @@
-{"name":"Local: Assignment4new","url":"d:\\DSA207\\Assignment4new.c","tests":[{"id":1665048486176,"input":"10000","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\DSA207\\Assignment4new.c","group":"local","local":true}
+{"name":"Local: Assignment4new","url":"d:\\DSA207\\Assignment4new.c","tests":[{"id":1665048486176,"input":"100","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\DSA207\\Assignment4new.c","group":"local","local":true}
