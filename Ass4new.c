@@ -13,6 +13,7 @@ typedef struct stud node;
 int n;
 int arr[10000000];
 node* convertingArray[10000000];
+double TimeTaken[10000000];
 
 
 node *Traversal(node *root)
@@ -223,8 +224,9 @@ int main()
         root = Ins(root, arr[i]);
         root = IsBalanced(root, arr[i]);
         end_t = clock();
+        TimeTaken[i]=((double)(end_t - start_t) / CLOCKS_PER_SEC);
         // CLOCKS_PER_SEC is a constant defined in time.h and its value is 10^6.
-        total_t += ((double)(end_t - start_t) / CLOCKS_PER_SEC);
+        total_t += TimeTaken[i];
         // if((i+1)%(50000)==0 )
         if((i+1)<=1000000 && (i+1)>=100000)
          fprintf(fpt,"%d, %f\n",i+1,total_t);
