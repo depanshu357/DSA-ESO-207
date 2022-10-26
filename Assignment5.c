@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <time.h>
 int arr[1000001];
+int C[10000001];
 // #include <random>
 void swap(int *x, int *y)
 {
@@ -11,15 +12,8 @@ void swap(int *x, int *y)
     *y = temp;
     return;
 }
-void MergeSort(int arr[], int l, int r)
-{
-    if (l >= r)
-        return;
-    int mid = (l + r) / 2;
-    // printf("working ");
-    MergeSort(arr, l, mid);
-    MergeSort(arr, mid + 1, r);
-    int C[r - l + 1];
+void Merge(int arr[],int l,int r){
+    int mid = (l+r)/2;
     int start1 = l, start2 = mid + 1;
     int k = 0;
     while (start1 <= mid && start2 <= r)
@@ -46,6 +40,18 @@ void MergeSort(int arr[], int l, int r)
     {
         arr[i] = C[i - l];
     }
+}
+void MergeSort(int arr[], int l, int r)
+{
+    if (l >= r)
+        return;
+    int mid = (l + r) / 2;
+    // printf("working ");
+    MergeSort(arr, l, mid);
+    MergeSort(arr, mid + 1, r);
+    // int C[r - l + 1];
+    Merge(arr,l,r);
+    
     return;
 }
 int Partition(int arr[], int l, int r)
@@ -85,7 +91,7 @@ int main()
     int n;
     scanf("%d", &n);
     FILE *fpt;
-    fpt = fopen("output.csv", "w+");
+    fpt = fopen("output.txt", "w+");
 
     // int arr[500];
     for (int j = 0; j < 500; j++)
@@ -104,13 +110,13 @@ int main()
         t = clock();
         QuickSort(arr, 0, n - 1);
         time_taken = clock() - t;
-        int time_taken_microseconds = ((double)time_taken );
+        int time_taken_microseconds = ((double)time_taken*1000000 )/(double)CLOCKS_PER_SEC;
         // for (int i = 0; i < n; i++)
         //     fprintf(fpt, "%d ", arr[i]);
         // printf("%d ",time_taken_microseconds);
         fprintf(fpt,"%d\n ",time_taken_microseconds);
         // fprintf(fpt, "\n");
     }
-
+    fclose(fpt);
     return 0;
 }
