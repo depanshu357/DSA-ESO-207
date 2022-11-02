@@ -22,7 +22,7 @@ void Merge(int arr[],int l,int r){
         {
             // printf("hello");
             C[k++] = arr[start2++];
-        }
+        }   
         else
         {
             C[k++] = arr[start1++];
@@ -51,7 +51,6 @@ void MergeSort(int arr[], int l, int r)
     MergeSort(arr, mid + 1, r);
     // int C[r - l + 1];
     Merge(arr,l,r);
-    
     return;
 }
 int Partition(int arr[], int l, int r)
