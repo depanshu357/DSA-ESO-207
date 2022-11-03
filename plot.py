@@ -5,7 +5,7 @@ import math
 x = []
 y = []
 
-with open('Ass5 1.4.csv', 'r') as csvfile:
+with open('Ass5 1.3.csv', 'r') as csvfile:
     plots = csv.reader(csvfile, delimiter=',')
 
     for row in plots:
@@ -17,7 +17,7 @@ with open('Ass5 1.4.csv', 'r') as csvfile:
         x.append(row[2])
         # x.append(row[1])
         y.append(row[1])
-    plt.scatter(x, y, color='r', label="Improved MergeSort Logarithmic Running Time")
+    plt.scatter(x, y, color='r', label="MergeSort Logarithmic Running Time")
 
 plt.ylabel('log(Time)')
 plt.xlabel('logn')
